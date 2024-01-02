@@ -1,0 +1,35 @@
+type Query{
+    jobs: [Job!],
+    job (id: ID!): Job,
+    company (id:ID!): Company
+}
+type Mutation{
+    """createJob(title: String!, description: String): Job """
+    createJob(input: CreateJobInput!): Job,
+    deleteJob (id:ID!): Job,
+    updateJob (input: updateJobInput!): Job
+}
+""" Type du job """
+type Job{
+    id:ID!,
+    """ this represent __date__ when the job was created """
+    date: String!,
+    title: String!,
+    company: Company!,
+    description: String
+}
+type Company{
+    id: ID!,
+    name: String!,
+    description: String,
+    jobs: [Job!]!
+}
+input CreateJobInput {
+    title: String!, 
+    description: String
+}
+input updateJobInput {
+    id: ID!,
+    title: String!,
+    description: String
+}
