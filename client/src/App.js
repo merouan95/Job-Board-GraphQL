@@ -9,6 +9,7 @@ import HomePage from './pages/HomePage';
 import JobPage from './pages/JobPage';
 import LoginPage from './pages/LoginPage';
 import { ApolloProvider } from '@apollo/client';
+import { apolloClient } from './lib/graphql/queries';
 
 function App() {
   const navigate = useNavigate();
@@ -25,7 +26,7 @@ function App() {
   };
 
   return (
-    <ApolloProvider>
+    <ApolloProvider client={apolloClient}>
       <NavBar user={user} onLogout={handleLogout} />
       <main className="section">
         <Routes>

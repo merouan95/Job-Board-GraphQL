@@ -53,6 +53,19 @@ const jobByIdQuery = gql`
   }
   ${jobDetailFragment}
 `;
+export const companyByIdQuery = gql`
+query($id: ID!)   {
+  company(id: $id){
+    id
+    name
+    description
+    jobs{
+        id
+        title
+        date
+    }
+  }
+}`;
 export async function createJob({ title, description }) {
   const mutation = gql`
   mutation CreateJob($input: CreateJobInput!){
@@ -84,27 +97,13 @@ export async function getJob(id) {
   const { data } = await apolloClient.query({ query: jobByIdQuery, variables: { id } })
   return data.job
 }
-
-export async function getCompany(id) {
-  const query = gql`
-    query($id: ID!)   {
-      company(id: $id){
-        id
-        name
-        description
-        jobs{
-            id
-            title
-            date
-        }
-      }
-    }`;
-
-  // const { company } = await client.request(query, { id });
-  // return company;
-  const { data } = await apolloClient.query({ query, variables: { id } })
-  return data.company
-}
+// No Longer using this
+// export async function getCompany(id) {
+//   // const { company } = await client.request(query, { id });
+//   // return company;
+//   const { data } = await apolloClient.query({ query: companyByIdQuery, variables: { id } })
+//   return data.company
+// }
 export async function getJobs() {
   const query = gql`
     query  Jobs{
