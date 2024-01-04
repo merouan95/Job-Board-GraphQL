@@ -10,7 +10,7 @@ function JobPage() {
     return <div>Loading...</div>
   }
   if (error) {
-    return <div>Loading unvailable...</div>
+    return <div>job unvailable...</div>
   }
   return (
     <div>

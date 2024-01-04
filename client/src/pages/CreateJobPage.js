@@ -7,8 +7,7 @@ function CreateJobPage() {
   const navigate = useNavigate()
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [mutate] = useMutation(createJobMutation)
-
+  const [mutate, { loading, error }] = useMutation(createJobMutation)
   const handleSubmit = async (event) => {
     event.preventDefault();
     // const job = await createJob({ title, description })
@@ -25,7 +24,9 @@ function CreateJobPage() {
     console.log("created succesfully", job);
     navigate(`/jobs/${job.id}`)
   };
-
+  if (error) {
+    return <div>Error while creating a job unvailable...</div>
+  }
   return (
     <div>
       <h1 className="title">
@@ -55,7 +56,7 @@ function CreateJobPage() {
           </div>
           <div className="field">
             <div className="control">
-              <button className="button is-link" onClick={handleSubmit}>
+              <button className="button is-link" onClick={handleSubmit} disabled={loading}>
                 Submit
               </button>
             </div>
