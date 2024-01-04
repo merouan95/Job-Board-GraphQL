@@ -24,7 +24,7 @@ const customLink = new ApolloLink((operation, forward) => {
   return forward(operation)
 })
 
-const apolloClient = new ApolloClient({
+export const apolloClient = new ApolloClient({
   link: concat(customLink, httpLink),
   cache: new InMemoryCache(),
   // defaultOptions:{
@@ -33,33 +33,34 @@ const apolloClient = new ApolloClient({
   //   }
   // }
 })
-const jobByIdQuery = gql`
-query($id: ID!)   {
-  job(id: $id){
-    id
-    date
-    title
-    company {
+const jobDetailFragment = gql`
+  fragment JobDetail on Job{
       id
-      name 
-    }
-    description
+      date
+      title
+      company {
+        id
+        name 
+      }
+      description
   }
-}`;
+`
+const jobByIdQuery = gql`
+  query($id: ID!)   {
+    job(id: $id){
+      ...JobDetail
+    }
+  }
+  ${jobDetailFragment}
+`;
 export async function createJob({ title, description }) {
   const mutation = gql`
   mutation CreateJob($input: CreateJobInput!){
     job: createJob(input: $input) {
-      id
-      date
-        title
-        company {
-          id
-          name 
-        }
-        description
+      ...JobDetail
     }
   }
+  ${jobDetailFragment}
   `
   // const { job } = await client.request(mutation, {
   //   input: { title, description }
@@ -67,7 +68,7 @@ export async function createJob({ title, description }) {
   const { data } = await apolloClient.mutate({
     mutation,
     variables: { input: { title, description } },
-    update: (cache, {data}) => {
+    update: (cache, { data }) => {
       cache.writeQuery({
         query: jobByIdQuery,
         variables: { id: data.job.id },

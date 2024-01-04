@@ -8,6 +8,7 @@ import CreateJobPage from './pages/CreateJobPage';
 import HomePage from './pages/HomePage';
 import JobPage from './pages/JobPage';
 import LoginPage from './pages/LoginPage';
+import { ApolloProvider } from '@apollo/client';
 
 function App() {
   const navigate = useNavigate();
@@ -24,7 +25,7 @@ function App() {
   };
 
   return (
-    <>
+    <ApolloProvider>
       <NavBar user={user} onLogout={handleLogout} />
       <main className="section">
         <Routes>
@@ -45,7 +46,7 @@ function App() {
           />
         </Routes>
       </main>
-    </>
+    </ApolloProvider>
   );
 }
 
