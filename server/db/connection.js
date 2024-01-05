@@ -7,3 +7,9 @@ export const connection = knex({
   },
   useNullAsDefault: true,
 });
+
+// Log my Database calls
+connection.on("query",({sql,bindings})=>{
+  const query= connection.raw(sql,bindings).toQuery();
+  console.log("[db Calls]",query)
+})
