@@ -1,5 +1,5 @@
 type Query{
-    jobs: [Job!],
+    jobs(limit: Int, offset: Int): JobSubList,
     job (id: ID!): Job,
     company (id:ID!): Company
 }
@@ -23,6 +23,10 @@ type Company{
     name: String!,
     description: String,
     jobs: [Job!]!
+}
+type JobSubList{
+    items: [Job!],
+    totalCount: Int!
 }
 input CreateJobInput {
     title: String!, 

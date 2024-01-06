@@ -19,8 +19,9 @@ export const useJob = (jobId) => {
     return { job: data?.job, loading, error: Boolean(error) }
 };
 
-export const useJobs = () => {
+export const useJobs = (limit, offset) => {
     const { data, loading, error } = useQuery(jobsQuery, {
+        variables: { limit, offset },
         fetchPolicy: "network-only"
     })
     return { jobs: data?.jobs, loading, error: Boolean(error) }

@@ -2,9 +2,19 @@ import { connection } from './connection.js';
 import { generateId } from './ids.js';
 
 const getJobTable = () => connection.table('job');
-
-export async function getJobs() {
-  return await getJobTable().select();
+export async function countJobs() {
+  const { count } = await getJobTable().first().count("* as count");
+  return count;
+}
+export async function getJobs(limit, offset) {
+  const query = getJobTable().select().orderBy("createdAt", "desc");
+  if (limit) {
+    query.limit(limit);
+  }
+  if (offset) {
+    query.offset(offset);
+  }
+  return await query;
 }
 
 export async function getJobsByCompany(companyId) {
@@ -28,7 +38,7 @@ export async function createJob({ companyId, title, description }) {
 }
 
 export async function deleteJob(id, companyId) {
-  const job = await getJobTable().first().where({ id , companyId});
+  const job = await getJobTable().first().where({ id, companyId });
   if (!job) {
     throw null;
   }
